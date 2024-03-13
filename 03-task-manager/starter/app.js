@@ -5,6 +5,9 @@ const app = express();
 // import routes from tasks.js
 const tasks = require('./routes/tasks')
 
+//connect to mongodb
+const connectDB = require('./db/connect')
+
 // sending json from app when making new tasks, to access data in routes, need middleware built into express
 // middleware
 
@@ -27,4 +30,16 @@ app.use('/api/v1/tasks', tasks)
 
 const port = 3000
 
-app.listen(port, console.log(`server is listening on port ${port}`))
+//We want to wait for the DB to connect successfully before we start up the express.
+const start = async () => {
+    try {
+        await connectDB()
+        // Server will only start with connection to database is successful
+        app.listen(port, console.log(`server is listening on port ${port}`))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// removed message of successful connection to DB however if we change password in /db/connect.js it will give error
+start()
