@@ -7,6 +7,7 @@ const tasks = require('./routes/tasks')
 
 //connect to mongodb
 const connectDB = require('./db/connect')
+require('dotenv').config()
 
 // sending json from app when making new tasks, to access data in routes, need middleware built into express
 // middleware
@@ -33,7 +34,7 @@ const port = 3000
 //We want to wait for the DB to connect successfully before we start up the express.
 const start = async () => {
     try {
-        await connectDB()
+        await connectDB(process.env.MONGO_URI)
         // Server will only start with connection to database is successful
         app.listen(port, console.log(`server is listening on port ${port}`))
     } catch (error) {
